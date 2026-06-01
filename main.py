@@ -1,12 +1,13 @@
 import discord
 from discord.ext import tasks
+import os
 
-TOKEN = "PASTE_YOUR_BOT_TOKEN_HERE"
+TOKEN = os.getenv("BOT_TOKEN")
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 
-CHANNEL_ID = 123456789012345678
+CHANNEL_ID = 123456789012345678  # Replace with your real channel ID
 
 @client.event
 async def on_ready():
@@ -22,14 +23,8 @@ async def daily_watchlist():
 📈 WATCHLIST
 
 🔥 AMD
-🔥 NVDA
 🔥 PLTR
 🔥 HOOD
-🔥 SLV
-
-👀 INTC
-👀 TSLA
-👀 WBD
-        """)
+""")
 
 client.run(TOKEN)

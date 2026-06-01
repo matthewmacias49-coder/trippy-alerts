@@ -9,23 +9,31 @@ client = discord.Client(intents=intents)
 
 CHANNEL_ID = 1449119042458878081
 
+
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
 
-channel = await client.fetch_channel(CHANNEL_ID)
+    channel = await client.fetch_channel(CHANNEL_ID)
+
     if channel:
         await channel.send("✅ Bot is online and connected!")
 
     daily_watchlist.start()
+
+
 @tasks.loop(hours=24)
 async def daily_watchlist():
     channel = await client.fetch_channel(CHANNEL_ID)
 
-    await channel.send("""
-📋 WATCHLIST
+    if channel:
+        await channel.send("""
+📈 **WATCHLIST**
 
 🔥 AMD
 🔥 PLTR
 🔥 HOOD
 """)
+
+
+client.run(TOKEN)

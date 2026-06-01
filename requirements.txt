@@ -1,0 +1,5 @@
+discord.py
+yfinance
+feedparser
+requests
+beautifulsoup4

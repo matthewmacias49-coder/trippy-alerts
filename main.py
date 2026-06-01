@@ -7,7 +7,7 @@ TOKEN = os.getenv("BOT_TOKEN")
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 
-CHANNEL_ID = 123456789012345678  # Replace with your real channel ID
+CHANNEL_ID = 1449119042458878081
 
 @client.event
 async def on_ready():

@@ -13,15 +13,57 @@ client = discord.Client(intents=intents)
 CHANNEL_ID = 1449119042458878081
 
 WATCHLIST_POOL = [
-    "AMD", "NVDA", "TSLA", "HOOD", "PLTR", "MSFT", "AMZN", "META",
-    "GOOG", "NFLX", "INTC", "DELL", "WBD", "NBIS", "SMH",
-    "SLV", "USO", "XOM", "CVX", "COP",
-    "DAL", "UAL", "AAL",
-    "SUPV", "ALLT", "LUMN", "XPEV",
-    "IBM", "LLY", "LMT"
+    "SMH",
+    "AMZN",
+    "HOOD",
+    "TSLA",
+    "DAL",
+    "UAL",
+    "AAL",
+    "LLY",
+    "IBM",
+    "GOOG",
+    "AMD",
+    "DELL",
+    "ADM",
+    "DE",
+    "NFLX",
+    "^VIX",
+    "UUP",
+    "INTC",
+    "NBIS",
+    "MSFT",
+    "PLTR",
+    "CL=F",
+    "META",
+    "USO",
+    "SLV",
+    "IAU",
+    "SPY",
+    "EOSE",
+    "CVX",
+    "COP",
+    "VLO",
+    "XLE",
+    "XOM",
+    "LMT",
+    "WBD",
+    "SI=F",
+    "SUPV",
+    "ALLT",
+    "LUMN",
+    "XPEV",
+    "RR",
+    "TFPM",
+    "NXE",
+    "INSM",
+    "UEC",
+    "URG",
+    "NVDA"
 ]
 
 last_post_date = None
+
 
 def get_top_movers():
     movers = []
@@ -37,13 +79,14 @@ def get_top_movers():
 
                 pct_change = ((current_close - prev_close) / prev_close) * 100
 
-                if abs(pct_change) >= 3:
-                    movers.append((symbol, pct_change))
+                movers.append((symbol, pct_change))
 
-        except Exception:
+        except Exception as e:
+            print(f"Error with {symbol}: {e}")
             continue
 
     movers.sort(key=lambda x: abs(x[1]), reverse=True)
+
     return movers[:5]
 
 
@@ -51,12 +94,17 @@ def get_top_movers():
 async def on_ready():
     print(f"Logged in as {client.user}")
 
-    channel = await client.fetch_channel(CHANNEL_ID)
+    try:
+        channel = await client.fetch_channel(CHANNEL_ID)
 
-    if channel:
-        await channel.send("✅ Trippy Alerts Online")
+        if channel:
+            await channel.send("✅ Trippy Alerts Online")
 
-    daily_watchlist.start()
+    except Exception as e:
+        print(f"Channel error: {e}")
+
+    if not daily_watchlist.is_running():
+        daily_watchlist.start()
 
 
 @tasks.loop(minutes=1)
@@ -75,19 +123,40 @@ async def daily_watchlist():
 
         last_post_date = today
 
-        channel = await client.fetch_channel(CHANNEL_ID)
+        try:
+            channel = await client.fetch_channel(CHANNEL_ID)
 
-        movers = get_top_movers()
+            movers = get_top_movers()
 
-        if not movers:
-            message = "📈 **TODAY'S WATCHLIST**\n\nNo stocks moved more than 3%."
-        else:
-            message = "📈 **TODAY'S WATCHLIST**\n\n"
+            today_str = now.strftime("%B %d, %Y")
+
+            if not movers:
+                await channel.send(
+                    f"📈 **TRIPPY MATT WATCHLIST — {today_str}**\n\nNo significant movers found."
+                )
+                return
+
+            biggest = movers[0]
+
+            message = f"📈 **TRIPPY MATT WATCHLIST — {today_str}**\n\n"
 
             for symbol, pct in movers:
-                message += f"🔥 {symbol} ({pct:+.2f}%)\n"
+                emoji = "🚀" if pct > 0 else "🔻"
+                message += f"{emoji} **{symbol}** ({pct:+.2f}%)\n"
 
-        await channel.send(message)
+            message += f"\n🔥 **Biggest Mover:** {biggest[0]} ({biggest[1]:+.2f}%)"
+
+            message += "\n\n🎯 **Why They're On Watch**"
+            message += "\n• Top 5 movers from my personal watchlist"
+            message += "\n• Looking for momentum continuation and breakout setups"
+            message += "\n• Watching for unusual movement and trader attention"
+            message += "\n• Strong movers often create the best day-trade opportunities"
+            message += "\n• These are the stocks most likely to be on my radar today"
+
+            await channel.send(message)
+
+        except Exception as e:
+            print(f"Watchlist error: {e}")
 
 
 client.run(TOKEN)

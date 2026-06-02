@@ -28,8 +28,6 @@ WATCHLIST_POOL = [
     "ADM",
     "DE",
     "NFLX",
-    "^VIX",
-    "UUP",
     "INTC",
     "NBIS",
     "MSFT",
@@ -40,7 +38,6 @@ WATCHLIST_POOL = [
     "SLV",
     "IAU",
     "SPY",
-    "EOSE",
     "CVX",
     "COP",
     "VLO",
@@ -49,16 +46,7 @@ WATCHLIST_POOL = [
     "LMT",
     "WBD",
     "SI=F",
-    "SUPV",
-    "ALLT",
-    "LUMN",
-    "XPEV",
-    "RR",
-    "TFPM",
-    "NXE",
     "INSM",
-    "UEC",
-    "URG",
     "NVDA"
 ]
 

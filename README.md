@@ -1,1 +1,1 @@
-# trippy-alerts
+# Trippy Bot

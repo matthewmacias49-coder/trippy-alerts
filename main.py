@@ -90,18 +90,6 @@ def test_fmp():
 
     except Exception as e:
         print(f"FMP ERROR: {e}")
-    try:
-        import requests
-
-        url = f"https://financialmodelingprep.com/api/v3/earning_calendar?from=2026-06-01&to=2026-06-07&apikey={FMP_API_KEY}"
-
-        data = requests.get(url, timeout=10).json()
-
-        print("FMP TEST:")
-        print(data[:3])
-
-    except Exception as e:
-        print(f"FMP ERROR: {e}")
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")

@@ -84,11 +84,7 @@ def get_top_movers():
 
     movers.sort(key=lambda x: abs(x[1]), reverse=True)
 
-   movers = []
-
-for symbol in WATCHLIST_POOL:
-...
-return movers[:5]
+    return movers[:10]
     for symbol in WATCHLIST_POOL:
         try:
             stock = yf.Ticker(symbol)
